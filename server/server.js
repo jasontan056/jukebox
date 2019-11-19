@@ -1,11 +1,33 @@
 const express = require('express');
-const bodyParser = require('body-parser')
 const path = require('path');
+const axios = require('axios');
+const querystring = require('querystring');
+require('dotenv').config();
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/ping', function (req, res) {
- return res.send('pong');
+app.get('/api/search', async (req, res) => {
+  let searchTerm = req.query.searchTerm;
+
+  let params = {
+    q: searchTerm,
+    part: 'snippet',
+    maxResults: 25,
+    type: 'video',
+    videoCategoryId: 10,
+    key: process.env.YOUTUBE_API_KEY,
+  }
+  let response;
+  try {
+    response =
+      await axios.get('https://www.googleapis.com/youtube/v3/search?' + querystring.stringify(params));
+    console.log(response);
+  } catch (e) {
+    return res.status(400).send("Error fetching search results.");
+  }
+
+  let results = response.data.items.map(item => { return { title: item.snippet.title, thumbnail: item.snippet.thumbnails.default } })
+  return res.send(results);
 });
 
 app.get('/', function (req, res) {
