@@ -2,9 +2,13 @@ const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const querystring = require('querystring');
+const Dao = require('./dao');
 require('dotenv').config();
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
+
+const dbFile = './.data/sqlite.db'
+const dao = new Dao(dbFile)
 
 app.get('/api/search', async (req, res) => {
   let searchTerm = req.query.searchTerm;
