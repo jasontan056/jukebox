@@ -21,12 +21,15 @@ app.get('/api/search', async (req, res) => {
   try {
     response =
       await axios.get('https://www.googleapis.com/youtube/v3/search?' + querystring.stringify(params));
-    console.log(response);
   } catch (e) {
     return res.status(400).send("Error fetching search results.");
   }
 
-  let results = response.data.items.map(item => { return { title: item.snippet.title, thumbnail: item.snippet.thumbnails.default } })
+  let results = response.data.items.map(item => { return {
+    id: item.id.videoId,
+    title: item.snippet.title,
+    channelTitle: item.snippet.channelTitle,
+    thumbnail: item.snippet.thumbnails.default}});
   return res.send(results);
 });
 
