@@ -3,24 +3,36 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
   paper: {
-  //  padding: theme.spacing(2),
+    //  padding: theme.spacing(2),
     margin: 'auto',
     maxWidth: 500,
   },
   img: {
     width: 120,
-    height: 90, 
+    height: 90,
   },
 }));
 
 export default function SongItem(props) {
   const classes = useStyles();
+
+  let playlistAddButton;
+  if (props.showPlaylistAddButton) {
+    playlistAddButton = (
+      <IconButton aria-label="playlistAdd"
+        onClick={() => props.onPlaylistAddButtonClicked()}>
+        <PlaylistAddIcon />
+      </IconButton>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -40,6 +52,9 @@ export default function SongItem(props) {
                 </Typography>
               </Grid>
             </Grid>
+          </Grid>
+          <Grid>
+            {playlistAddButton}
           </Grid>
         </Grid>
       </Paper>

@@ -19,7 +19,7 @@ function App() {
       />*/
   return (
     <div className="App">
-      <SearchComponent/>
+      <SearchComponent onSongAdded={(song) => console.log(song)}/>
     </div>
   );
 }

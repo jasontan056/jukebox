@@ -25,11 +25,16 @@ export default function Search(props) {
     };
 
     let songItems = songs.map((song, index) => {
+        let onSongAdded = () => {
+            props.onSongAdded(song);
+        };
         return (
-            <li>
-                <SongItem key={index} title={song.title}
+            <li key={index}>
+                <SongItem title={song.title}
                     channelTitle={song.channelTitle}
-                    thumbnail={song.thumbnail} />
+                    thumbnail={song.thumbnail}
+                    showPlaylistAddButton='true'
+                    onPlaylistAddButtonClicked={onSongAdded} />
             </li>
         )});
 
