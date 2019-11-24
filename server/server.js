@@ -33,7 +33,7 @@ app.get('/api/search', async (req, res) => {
     id: item.id.videoId,
     title: item.snippet.title,
     channelTitle: item.snippet.channelTitle,
-    thumbnail: item.snippet.thumbnails.default}});
+    thumbnail: item.snippet.thumbnails.default.url}});
   return res.send(results);
 });
 
