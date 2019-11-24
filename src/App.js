@@ -3,6 +3,12 @@ import './App.css';
 import YouTube from 'react-youtube';
 import SearchComponent from './SearchComponent';
 import PlayList from './Playlist';
+import CreateRoom from './CreateRoom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 function App() {
   const youtubePlayerOpts = {
@@ -13,16 +19,19 @@ function App() {
     }
   };
 
-/*  
-      <YouTube
-        videoId="2g811Eo7K8U"
-        opts={youtubePlayerOpts}
-      />*/
+  /*  
+        <YouTube
+          videoId="2g811Eo7K8U"
+          opts={youtubePlayerOpts}
+        />*/
   return (
-    <div className="App">
-      <PlayList/>
-      <SearchComponent onSongAdded={(song) => console.log(song)}/>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/">
+          <CreateRoom />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
