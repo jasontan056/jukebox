@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import YouTube from 'react-youtube';
 import SearchComponent from './SearchComponent';
+import PlayList from './Playlist';
 
 function App() {
   const youtubePlayerOpts = {
@@ -19,6 +20,7 @@ function App() {
       />*/
   return (
     <div className="App">
+      <PlayList/>
       <SearchComponent onSongAdded={(song) => console.log(song)}/>
     </div>
   );

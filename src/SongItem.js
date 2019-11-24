@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import classNames from 'classnames';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,6 +15,9 @@ const useStyles = makeStyles(theme => ({
     //  padding: theme.spacing(2),
     margin: 'auto',
     maxWidth: 500,
+  },
+  paperHighlighted: {
+    backgroundColor: '#dedede'
   },
   img: {
     width: 120,
@@ -34,9 +38,16 @@ export default function SongItem(props) {
     );
   }
 
+  let paperClassName;
+  if (props.highlighted) {
+    paperClassName = classNames(classes.paper, classes.paperHighlighted);
+  } else {
+    paperClassName = classes.paper;
+  }
+
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <Paper className={paperClassName}>
         <Grid container spacing={2}>
           <Grid item>
             <img className={classes.img} alt="complex" src={props.thumbnail} />
