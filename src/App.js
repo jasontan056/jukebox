@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import YouTube from 'react-youtube';
+import SearchBar from './SearchBar';
 
 function App() {
   const youtubePlayerOpts = {
@@ -11,8 +12,11 @@ function App() {
     }
   };
 
+  
+
   return (
     <div className="App">
+      <SearchBar handleSubmit={(term) => console.log('submitted: ' + term)}/>
       <YouTube
         videoId="2g811Eo7K8U"
         opts={youtubePlayerOpts}
