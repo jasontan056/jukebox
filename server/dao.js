@@ -28,27 +28,57 @@ module.exports = class Dao {
                 this.db.run(createRoomTableSql);
                 this.db.run(createSongTableSql);
             }
-        })
-
-        // !!! Delete these later.
-        this.createRoom('asdf');
-        this.getRoom('1', (err, rows) => {
-            console.log('got this result from getRoom: ' + rows[0].name);
         });
+
+       /* this.createRoom('asdf')
+            .then((data) => {
+                console.log(data);
+            });
+            
+        this.getRoomById(1).then((row) => console.log(row));*/
+
     }
 
-    getRoom(roomId, callback) {
+    run(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.run(sql, params, function (err) {
+                if (err) {
+                    console.log('Error running sql ' + sql)
+                    console.log(err)
+                    reject(err)
+                } else {
+                    resolve({ id: this.lastID })
+                }
+            })
+        })
+    }
+
+    get(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, params, (err, result) => {
+                if (err) {
+                    console.log('Error running sql: ' + sql)
+                    console.log(err)
+                    reject(err)
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    }
+
+    getRoomById(roomId) {
         const sql = `
             SELECT *
             FROM rooms
             WHERE id=${roomId}`;
-        this.db.all(sql, [], callback);
+        return this.get(sql, []);
     }
 
     createRoom(name) {
         const sql = `
             INSERT INTO rooms (name)
                 VALUES ('${name}');`
-        this.db.run(sql);
+        return this.run(sql);
     }
 }
