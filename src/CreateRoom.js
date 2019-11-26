@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -15,8 +16,17 @@ export default function CreateRoom() {
 
     let handleSubmit = event => {
         event.preventDefault();
-        // here i should create a room and navigate
-        // to the next page
+        axios.post('/api/room', {
+            roomName: roomName,
+          })
+          .then(function (response) {
+            const roomId = response.id;
+            
+            // TODO: navigate to the player page
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     };
 
     let handleChange = event => {
