@@ -4,8 +4,12 @@ const axios = require('axios');
 const querystring = require('querystring');
 const Dao = require('./dao');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 const app = express();
+
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
+app.use(bodyParser.json()); 
 
 const dbFile = './.data/sqlite.db'
 const dao = new Dao(dbFile)
@@ -35,6 +39,35 @@ app.get('/api/search', async (req, res) => {
     channelTitle: item.snippet.channelTitle,
     thumbnail: item.snippet.thumbnails.default.url}});
   return res.send(results);
+});
+
+app.get('/api/room/:roomId', (req, res) => {
+  const roomId = req.params.roomId;
+  if (!roomId) {
+    return res.status(400).send('Missing Room ID');
+  }
+  
+  dao.getRoomById(roomId)
+    .then((room) => {
+      return res.send(room);
+    })
+    .catch((err) => {
+      return res.status(404).statusMessage('Cannot find room.');
+    });
+});
+
+app.post('/api/room', (req, res) => {
+  const roomName = req.body.roomName;
+  console.log(roomName);
+
+  dao.createRoom(roomName)
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).statusMessage('Error creating room: ' + err);
+    });
 });
 
 app.get('/', function (req, res) {
