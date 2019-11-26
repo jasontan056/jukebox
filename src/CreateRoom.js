@@ -10,9 +10,31 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CreateRoom() {
+    const classes = useStyles();
+    const [roomName, setRoomName] = useState('');
+
+    let handleSubmit = event => {
+        event.preventDefault();
+        // here i should create a room and navigate
+        // to the next page
+    };
+
+    let handleChange = event => {
+        setRoomName(event.target.value);
+    }
+
+    // TODO: should probably also add a submit button.
     return (
-        <div>
-            blah
-        </div>
+        <form className={classes.container} noValidate autoComplete="off"
+            onSubmit={handleSubmit}>
+            <div>
+                <TextField
+                    className={classes.textField}
+                    label="Enter Room Name"
+                    margin="normal"
+                    onChange={handleChange}
+                />
+            </div>
+        </form>
     );
 };

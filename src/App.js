@@ -4,6 +4,7 @@ import YouTube from 'react-youtube';
 import SearchComponent from './SearchComponent';
 import PlayList from './Playlist';
 import CreateRoom from './CreateRoom';
+import Client from './Client';
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,6 +28,9 @@ function App() {
   return (
     <Router>
       <Switch>
+        <Route path="/client/:roomId">
+          <Client />
+        </Route>
         <Route path="/">
           <CreateRoom />
         </Route>
