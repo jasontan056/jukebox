@@ -18,8 +18,9 @@ export default function Client(props) {
         onRoomInfo((roomInfo) => {
             // TODO: set songs and currentSongId from roomInfo
             console.log(roomInfo);
-            setRoomName(roomInfo.name);
+            setRoomName(roomInfo.roomName);
             setCurrentSongId(roomInfo.currentSongId);
+            setSongs(List(roomInfo.songs));
         });
     
         onSongAdded((song) => {

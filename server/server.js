@@ -23,8 +23,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', function () {
     console.log('user disconnected');
-    console.log(currentRoom);
-    console.log(roomToSockets);
+
     if (currentRoom) {
       if (!(currentRoom in roomToSockets)) {
         return;
@@ -35,7 +34,8 @@ io.on('connection', (socket) => {
         return s !== socket;
       });
 
-      console.log('after remove: ' + roomToSockets[currentRoom]);
+      console.log('current room: ' + currentRoom);
+      console.log('members in room: ' + roomToSockets[currentRoom].length);
     }
   });
 
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
       .then((data) => {
         console.log('successfully added song: ' + data.id);
         song.id = data.id;
-        
+
         io.emit('songAdded', song);
       })
       .catch((err) => {
@@ -60,19 +60,26 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', roomId => {
     console.log(`user joined ${roomId}`);
     currentRoom = roomId;
-    if (!roomToSockets[currentRoom]) {
+    if (!(currentRoom in roomToSockets)) {
       roomToSockets[currentRoom] = [];
     }
 
     roomToSockets[currentRoom].push(socket);
 
-    // TODO: send over playlist and room info
-    Promise.all([dao.getRoomById(roomId)])
-      .then(([room]) => {
-        console.log(room);
+    console.log('current room: ' + currentRoom);
+    console.log('members in room: ' + roomToSockets[currentRoom].length);
 
-        // TODO: Fetch songs and add to room Info as well.
-        const roomInfo = room;
+    // TODO: send over playlist and room info
+    Promise.all([dao.getRoomById(roomId), dao.getSongsByRoomId(roomId)])
+      .then(([room, songs]) => {
+        console.log(room);
+        console.log(songs);
+
+        const roomInfo = {
+          roomName: room.name,
+          currentSongId: room.currentSongId,
+          songs: songs
+        };
         io.emit('roomInfo', roomInfo);
       })
       .catch((err) => {
