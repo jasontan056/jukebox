@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SearchComponent from './SearchComponent';
 import PlayList from './Playlist';
-import {joinRoom, onRoomInfo} from './Socket';
+import {addSong, onSongAdded, joinRoom, onRoomInfo} from './Socket';
 import { List } from 'immutable';
-import axios from 'axios';
 import {
     useParams
 } from "react-router-dom";
@@ -12,23 +11,28 @@ export default function Client(props) {
     const [roomName, setRoomName] = useState('');
     const [songs, setSongs] = useState(List());
     const [currentSongId, setCurrentSongId] = useState(0);
-
-    let { roomId } = useParams();
+    const { roomId } = useParams();
 
     useEffect(() => {
+        console.log('in userEffect!!!')
         onRoomInfo((roomInfo) => {
             // TODO: set songs and currentSongId from roomInfo
             console.log(roomInfo);
             setRoomName(roomInfo.name);
             setCurrentSongId(roomInfo.currentSongId);
         });
+    
+        onSongAdded((song) => {
+            setSongs(s => s.push(song));
+        });
+
         joinRoom(roomId);
-    }, [roomId, setRoomName]);
+    }, [roomId, setRoomName, setSongs]);
 
 
     let addSongToPlaylist = (song) => {
         // Send on socket to add song.
-        setSongs(songs.push(song));
+        addSong(roomId, song);
     };
 
     return (
