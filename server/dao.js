@@ -9,16 +9,19 @@ module.exports = class Dao {
         const createRoomTableSql = `
             CREATE TABLE IF NOT EXISTS rooms (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT)`;
+                name TEXT,
+                currentSongId INTEGER,
+                FOREIGN KEY (currentSongId)
+                    REFERENCES songs (id) )`;
         const createSongTableSql = `
             CREATE TABLE IF NOT EXISTS songs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                room_id INTEGER NOT NULL,
+                roomId INTEGER NOT NULL,
                 videoId TEXT NOT NULL,
                 title TEXT NOT NULL,
                 channelTitle TEXT NOT NULL,
                 thumbnail TEXT NOT NULL,
-                FOREIGN KEY (room_id)
+                FOREIGN KEY (roomId)
                     REFERENCES rooms (id) 
                         ON UPDATE CASCADE
                         ON DELETE CASCADE)`;

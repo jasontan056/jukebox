@@ -48,19 +48,18 @@ io.on('connection', (socket) => {
 
     roomToSockets[currentRoom].push(socket);
 
-    // TODO: send over playlist.
-    io.emit('roomInfo', [{
-      "id": "TxfJbu-z_0Q",
-      "title": "asdfmovie12 song (feat. EileMonty) | LilDeuceDeuce",
-      "channelTitle": "LilDeuceDeuce",
-      "thumbnail": "https://i.ytimg.com/vi/TxfJbu-z_0Q/default.jpg"
-    },
-      {
-        "id": "hHkKJfcBXcw",
-        "title": "I LIKE TRAINS (asdfmovie song)",
-        "channelTitle": "TomSka",
-        "thumbnail": "https://i.ytimg.com/vi/hHkKJfcBXcw/default.jpg"
-      }]);
+    // TODO: send over playlist and room info
+    Promise.all([dao.getRoomById(roomId)])
+      .then(([room]) => {
+        console.log(room);
+
+        // TODO: Fetch songs and add to room Info as well.
+        const roomInfo = room;
+        io.emit('roomInfo', roomInfo);
+      })
+      .catch((err) => {
+        console.log('Got error getting room info: ' + err);
+      });
     });
   });
 

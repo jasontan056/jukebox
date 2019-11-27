@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 export default function Client(props) {
+    const [roomName, setRoomName] = useState('');
     const [songs, setSongs] = useState(List());
     const [currentSongId, setCurrentSongId] = useState(0);
 
@@ -17,19 +18,13 @@ export default function Client(props) {
     useEffect(() => {
         onRoomInfo((roomInfo) => {
             // TODO: set songs and currentSongId from roomInfo
+            console.log(roomInfo);
+            setRoomName(roomInfo.name);
+            setCurrentSongId(roomInfo.currentSongId);
         });
         joinRoom(roomId);
+    }, [roomId, setRoomName]);
 
-        axios.get(`/api/room/${roomId}`)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log('got error: ' + err);
-            });
-        // TODO: Fetch the songs in this room.
-        // Remember to set currentSongId.
-    }, [roomId]);
 
     let addSongToPlaylist = (song) => {
         // Send on socket to add song.
@@ -39,6 +34,8 @@ export default function Client(props) {
     return (
         <div>
             <h3>Room ID: {roomId}</h3>
+            <h3>Room Name: {roomName}</h3>
+            <h3>CurrentSongId: {currentSongId}</h3>
             <PlayList songs={songs} currentSongId={currentSongId} />
             <SearchComponent onSongAdded={addSongToPlaylist} />
         </div>
