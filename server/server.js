@@ -61,6 +61,8 @@ io.on('connection', (socket) => {
         "channelTitle": "TomSka",
         "thumbnail": "https://i.ytimg.com/vi/hHkKJfcBXcw/default.jpg"
       }]);
+    });
+  });
 
 app.get('/api/search', async (req, res) => {
   let searchTerm = req.query.searchTerm;
