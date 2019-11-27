@@ -26,3 +26,6 @@ export function onSongAdded(cb) {
         cb(song);
     });
 }
+
+socket.on('connect', () => console.log('socket connected'));
+socket.on('disconnect', (reason) => console.log('socket disconnected: ' + reason));
