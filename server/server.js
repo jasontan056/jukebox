@@ -83,7 +83,7 @@ app.get('/api/search', async (req, res) => {
 
   let results = response.data.items.map(item => {
     return {
-      id: item.id.videoId,
+      videoId: item.id.videoId,
       title: item.snippet.title,
       channelTitle: item.snippet.channelTitle,
       thumbnail: item.snippet.thumbnails.default.url
