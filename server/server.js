@@ -39,6 +39,24 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('addSong', (roomId, song) => {
+    console.log('server handling addSong');
+    console.log(roomId);
+    console.log(song);
+    console.log('blah');
+
+    dao.addSong(song, roomId)
+      .then((data) => {
+        console.log('successfully added song: ' + data.id);
+        song.id = data.id;
+        
+        io.emit('songAdded', song);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
   socket.on('joinRoom', roomId => {
     console.log(`user joined ${roomId}`);
     currentRoom = roomId;
