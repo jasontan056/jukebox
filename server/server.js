@@ -6,13 +6,61 @@ const Dao = require('./dao');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
-app.use(express.static(path.join(__dirname, 'build')));
-app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
-app.use(bodyParser.json()); 
+app.use(express.static(path.join(__dirname, '../build')));
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));            // parse application/x-www-form-urlencoded
+app.use(bodyParser.json());
 
 const dbFile = './.data/sqlite.db'
 const dao = new Dao(dbFile)
+
+const roomToSockets = {};
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  let currentRoom;
+
+  socket.on('disconnect', function () {
+    console.log('user disconnected');
+    console.log(currentRoom);
+    console.log(roomToSockets);
+    if (currentRoom) {
+      if (!(currentRoom in roomToSockets)) {
+        return;
+      }
+
+      console.log('before remove: ' + roomToSockets[currentRoom]);
+      roomToSockets[currentRoom] = roomToSockets[currentRoom].filter((s) => {
+        return s !== socket;
+      });
+
+      console.log('after remove: ' + roomToSockets[currentRoom]);
+    }
+  });
+
+  socket.on('joinRoom', roomId => {
+    console.log(`user joined ${roomId}`);
+    currentRoom = roomId;
+    if (!roomToSockets[currentRoom]) {
+      roomToSockets[currentRoom] = [];
+    }
+
+    roomToSockets[currentRoom].push(socket);
+
+    // TODO: send over playlist.
+    io.emit('roomInfo', [{
+      "id": "TxfJbu-z_0Q",
+      "title": "asdfmovie12 song (feat. EileMonty) | LilDeuceDeuce",
+      "channelTitle": "LilDeuceDeuce",
+      "thumbnail": "https://i.ytimg.com/vi/TxfJbu-z_0Q/default.jpg"
+    },
+      {
+        "id": "hHkKJfcBXcw",
+        "title": "I LIKE TRAINS (asdfmovie song)",
+        "channelTitle": "TomSka",
+        "thumbnail": "https://i.ytimg.com/vi/hHkKJfcBXcw/default.jpg"
+      }]);
 
 app.get('/api/search', async (req, res) => {
   let searchTerm = req.query.searchTerm;
@@ -33,11 +81,14 @@ app.get('/api/search', async (req, res) => {
     return res.status(400).send("Error fetching search results.");
   }
 
-  let results = response.data.items.map(item => { return {
-    id: item.id.videoId,
-    title: item.snippet.title,
-    channelTitle: item.snippet.channelTitle,
-    thumbnail: item.snippet.thumbnails.default.url}});
+  let results = response.data.items.map(item => {
+    return {
+      id: item.id.videoId,
+      title: item.snippet.title,
+      channelTitle: item.snippet.channelTitle,
+      thumbnail: item.snippet.thumbnails.default.url
+    }
+  });
   return res.send(results);
 });
 
@@ -46,7 +97,7 @@ app.get('/api/room/:roomId', (req, res) => {
   if (!roomId) {
     return res.status(400).send('Missing Room ID');
   }
-  
+
   dao.getRoomById(roomId)
     .then((room) => {
       return res.send(room);
@@ -71,7 +122,7 @@ app.post('/api/room', (req, res) => {
 });
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
-app.listen(process.env.PORT || 8080);
+http.listen(process.env.PORT || 8080);

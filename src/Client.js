@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchComponent from './SearchComponent';
 import PlayList from './Playlist';
+import {joinRoom, onRoomInfo} from './Socket';
 import { List } from 'immutable';
 import axios from 'axios';
 import {
@@ -14,6 +15,11 @@ export default function Client(props) {
     let { roomId } = useParams();
 
     useEffect(() => {
+        onRoomInfo((roomInfo) => {
+            // TODO: set songs and currentSongId from roomInfo
+        });
+        joinRoom(roomId);
+
         axios.get(`/api/room/${roomId}`)
             .then((res) => {
                 console.log(res.data);
