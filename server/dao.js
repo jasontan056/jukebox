@@ -32,14 +32,6 @@ module.exports = class Dao {
                 this.db.run(createSongTableSql);
             }
         });
-
-       /* this.createRoom('asdf')
-            .then((data) => {
-                console.log(data);
-            });
-            
-        this.getRoomById(1).then((row) => console.log(row));*/
-
     }
 
     run(sql, params = []) {
@@ -70,6 +62,20 @@ module.exports = class Dao {
         })
     }
 
+    all(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.all(sql, params, (err, results) => {
+                if (err) {
+                    console.log('Error running sql: ' + sql)
+                    console.log(err)
+                    reject(err)
+                } else {
+                    resolve(results)
+                }
+            })
+        })
+    }
+
     getRoomById(roomId) {
         const sql = `
             SELECT *
@@ -82,6 +88,22 @@ module.exports = class Dao {
         const sql = `
             INSERT INTO rooms (name)
                 VALUES ('${name}');`
+        return this.run(sql);
+    }
+
+    getSongsByRoomId(roomId) {
+        const sql = `
+            SELECT *
+            FROM songs
+            WHERE roomId=${roomId}`;
+        return this.all(sql, []);
+    }
+
+    addSong(song, roomId) {
+        const {videoId, title, channelTitle, thumbnail} = song;
+        const sql = `
+            INSERT INTO songs (roomId, videoId, title, channelTitle, thumbnail)
+                VALUES ('${roomId}', '${videoId}', '${title}', '${channelTitle}', '${thumbnail}');`
         return this.run(sql);
     }
 }
