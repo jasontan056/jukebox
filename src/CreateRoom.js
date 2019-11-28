@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -11,6 +12,8 @@ const useStyles = makeStyles(theme => ({
 export default function CreateRoom() {
   const classes = useStyles();
   const [roomName, setRoomName] = useState("");
+  const [roomId, setRoomId] = useState(null);
+  const [navigateToClient, setNavigateToClient] = useState(false);
 
   let handleSubmit = event => {
     event.preventDefault();
@@ -19,14 +22,17 @@ export default function CreateRoom() {
         roomName: roomName
       })
       .then(function(response) {
-        const roomId = response.lastId;
-
-        // TODO: navigate to the player page
+        setRoomId(response.data.lastId);
+        setNavigateToClient(true);
       })
       .catch(function(error) {
         console.log(error);
       });
   };
+
+  if (navigateToClient) {
+    return <Redirect to={`/player/${roomId}`} />;
+  }
 
   let handleChange = event => {
     setRoomName(event.target.value);
