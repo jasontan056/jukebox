@@ -6,7 +6,8 @@ import {
   onSongAdded,
   joinRoom,
   onRoomInfo,
-  onCurrentSongIdChange
+  onCurrentSongIdChange,
+  onPlayingChanged
 } from "./Socket";
 import { List } from "immutable";
 import { useParams } from "react-router-dom";
@@ -35,6 +36,8 @@ export default function Client(props) {
     });
 
     onCurrentSongIdChange(id => setCurrentSongId(id));
+
+    onPlayingChanged(playing => setPlaying(playing));
 
     joinRoom(roomId);
   }, [roomId, setRoomName, setSongs]);

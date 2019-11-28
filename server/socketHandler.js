@@ -60,8 +60,10 @@ module.exports = function handleSockets(io, dao) {
         }
 
         if (state === "play" || state === "pause") {
-          // Set state to play only if there is a current song to play.
-          dao.updateRoomPlaying(roomId, state === "play");
+          const playing = state === "play";
+          dao.updateRoomPlaying(roomId, playing);
+
+          socket.emit("playing", playing);
           return;
         }
 

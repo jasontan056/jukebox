@@ -33,6 +33,10 @@ export function sendPlayerState(roomId, state) {
   socket.emit("playerState", roomId, state);
 }
 
+export function onPlayingChanged(cb) {
+  socket.on("playing", playing => cb(playing));
+}
+
 export function onCurrentSongIdChange(cb) {
   socket.on("currentSongId", currentSongId => cb(currentSongId));
 }
@@ -41,7 +45,3 @@ socket.on("connect", () => console.log("socket connected"));
 socket.on("disconnect", reason =>
   console.log("socket disconnected: " + reason)
 );
-
-socket.on("playerState", async (roomId, state) => {
-  console.log("socket on playerState");
-});
