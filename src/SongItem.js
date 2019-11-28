@@ -1,28 +1,28 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import classNames from 'classnames';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import classNames from "classnames";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   paper: {
     //  padding: theme.spacing(2),
-    margin: 'auto',
-    maxWidth: 500,
+    margin: "auto",
+    maxWidth: 500
   },
   paperHighlighted: {
-    backgroundColor: '#dedede'
+    backgroundColor: "#dedede"
   },
   img: {
     width: 120,
-    height: 90,
-  },
+    height: 90
+  }
 }));
 
 export default function SongItem(props) {
@@ -31,8 +31,10 @@ export default function SongItem(props) {
   let playlistAddButton;
   if (props.showPlaylistAddButton) {
     playlistAddButton = (
-      <IconButton aria-label="playlistAdd"
-        onClick={() => props.onPlaylistAddButtonClicked()}>
+      <IconButton
+        aria-label="playlistAdd"
+        onClick={() => props.onPlaylistAddButtonClicked()}
+      >
         <PlaylistAddIcon />
       </IconButton>
     );
@@ -64,9 +66,7 @@ export default function SongItem(props) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid>
-            {playlistAddButton}
-          </Grid>
+          <Grid>{playlistAddButton}</Grid>
         </Grid>
       </Paper>
     </div>
