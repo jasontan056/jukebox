@@ -1,8 +1,5 @@
 import React from "react";
 import "./App.css";
-import YouTube from "react-youtube";
-import SearchComponent from "./SearchComponent";
-import PlayList from "./Playlist";
 import CreateRoom from "./CreateRoom";
 import Client from "./Client";
 import Player from "./Player";
