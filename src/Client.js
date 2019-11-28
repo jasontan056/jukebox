@@ -37,26 +37,41 @@ export default function Client(props) {
         joinRoom(roomId);
     }, [roomId, setRoomName, setSongs]);
 
-    console.log('currentSongId : ' + currentSongId);
-    const playPauseClicked = (playing) => {
-        console.log('playpause clicked');
-        const playerState = playing ? 'play' : 'pause';
-        sendPlayerState(roomId, playerState);
+    const playerStateButtonClicked = (state) => {
+        sendPlayerState(roomId, state);
     }
-
     const playPauseButton = playing ? (
         <IconButton aria-label="pause button"
-            onClick={() =>playPauseClicked(false)}
+            onClick={() =>playerStateButtonClicked('play')}
             disabled={!currentSongId}>
             <PauseIcon />
         </IconButton>
     ) : (
         <IconButton aria-label="play button"
-            onClick={() => playPauseClicked(true)}
+            onClick={() => playerStateButtonClicked('pause')}
             disabled={!currentSongId}>
             <PlayArrowIcon />
         </IconButton>
-    ) ;
+    );
+
+    const currentSongIndex =
+        songs.findIndex((song) => song.id === currentSongId);
+    const disableNextButton =
+        currentSongIndex === -1 || currentSongIndex === songs.count() - 1;
+    const nextButton = (
+        <IconButton aria-label="skip next button"
+            onClick={() => playerStateButtonClicked('next')}
+            disabled={disableNextButton}>
+            <SkipNextIcon />
+        </IconButton>
+    );
+    const prevButton = (
+        <IconButton aria-label="skip previous button"
+            onClick={() => playerStateButtonClicked('prev')}
+            disabled={currentSongIndex < 1}>
+            <SkipPreviousIcon />
+        </IconButton>
+    );
 
     let addSongToPlaylist = (song) => {
         // Send on socket to add song.
@@ -68,7 +83,9 @@ export default function Client(props) {
             <h3>Room ID: {roomId}</h3>
             <h3>Room Name: {roomName}</h3>
             <h3>CurrentSongId: {currentSongId}</h3>
+            {prevButton}
             {playPauseButton}
+            {nextButton}
             <PlayList songs={songs} currentSongId={currentSongId} />
             <SearchComponent onSongAdded={addSongToPlaylist} />
         </div>
