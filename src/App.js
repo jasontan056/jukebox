@@ -5,31 +5,23 @@ import SearchComponent from './SearchComponent';
 import PlayList from './Playlist';
 import CreateRoom from './CreateRoom';
 import Client from './Client';
+import Player from './Player';
+
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
 
-function App() {
-  const youtubePlayerOpts = {
-    height: '390',
-    width: '640',
-    playerVars: { // https://developers.google.com/youtube/player_parameters
-      autoplay: 1
-    }
-  };
-
-  /*  
-        <YouTube
-          videoId="2g811Eo7K8U"
-          opts={youtubePlayerOpts}
-        />*/
+export default function App() {
   return (
     <Router>
       <Switch>
         <Route path="/client/:roomId">
           <Client />
+        </Route>
+        <Route path="/player/:roomId">
+          <Player/>
         </Route>
         <Route path="/">
           <CreateRoom />
@@ -38,5 +30,3 @@ function App() {
     </Router>
   );
 }
-
-export default App;
