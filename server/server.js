@@ -69,19 +69,39 @@ io.on('connection', (socket) => {
     console.log('handling player action: ' + state);
     try {
       const room = await dao.getRoomById(roomId);
+      // Shouldn't be able to change player state if there is no
+      // current song.
+      if (!room.currentSongId) {
+        throw new Error("No current song.");
+      }
 
       if (state === 'play' || state === 'pause') {
         // Set state to play only if there is a current song to play.
-        dao.updateRoomPlaying(roomId,
-          state === 'play' && room.currentSongId)
+        dao.updateRoomPlaying(roomId, state === 'play');
+        return;
       }
-      /*
-      } else if (state === 'next') {
-        // TODO: handle this
-        // need to get songs to find next song id
+
+      const songs = await dao.getSongsByRoomId(roomId);
+      const currentSongIndex = songs.findIndex(
+        (song) => song.id ===room.currentSongId);
+      if (currentSongIndex < 0) {
+        throw new Error("current song doesn't exist in song table");
+      }
+      let updatedSongId;
+      if (state === 'next') {
+        if (currentSongIndex + 1 === songs.length) {
+          throw new Error("No next song.");
+        }
+        updatedSongId = songs[currentSongIndex + 1].id;
       } else if (state === 'prev') {
-        // TODO: handle this
-      }*/
+        if (currentSongIndex === 0) {
+          throw new Error("No previous song.");
+        }
+        updatedSongId = songs[currentSongIndex - 1].id;
+      }
+
+      dao.updateRoomCurrentSongId(roomId, updatedSongId);
+      io.emit('currentSongId', updatedSongId);
     } catch (err) {
       console.log('Error handling player state: ' + err);
       return;
