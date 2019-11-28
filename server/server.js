@@ -39,22 +39,53 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('addSong', (roomId, song) => {
+  socket.on('addSong', async (roomId, song) => {
     console.log('server handling addSong');
     console.log(roomId);
     console.log(song);
     console.log('blah');
 
-    dao.addSong(song, roomId)
-      .then((data) => {
-        console.log('successfully added song: ' + data.id);
-        song.id = data.id;
+    // If this is the first song you also have to
+    // update current song in room to this songId.
+    try {
+      const songData = await dao.addSong(song, roomId);
+      song.id = songData.lastId;
+      io.emit('songAdded', song);
 
-        io.emit('songAdded', song);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      const songs = await dao.getSongsByRoomId(roomId);
+      // If this was the first song, update current song in room.
+      if (songs.length === 1) {
+        await dao.updateRoomCurrentSongId(roomId, song.id);
+
+        io.emit('currentSongId', song.id);
+      }
+    } catch (err) {
+      console.log('Error adding song: ' + err);
+    }
+  });
+
+  // State can be 'play', 'pause', 'next', 'prev'
+  socket.on('playerState', async (roomId, state) => {
+    console.log('handling player action: ' + state);
+    try {
+      const room = await dao.getRoomById(roomId);
+
+      if (state === 'play' || state === 'pause') {
+        // Set state to play only if there is a current song to play.
+        dao.updateRoomPlaying(roomId,
+          state === 'play' && room.currentSongId)
+      }
+      /*
+      } else if (state === 'next') {
+        // TODO: handle this
+        // need to get songs to find next song id
+      } else if (state === 'prev') {
+        // TODO: handle this
+      }*/
+    } catch (err) {
+      console.log('Error handling player state: ' + err);
+      return;
+    }
   });
 
   socket.on('joinRoom', roomId => {
@@ -78,7 +109,8 @@ io.on('connection', (socket) => {
         const roomInfo = {
           roomName: room.name,
           currentSongId: room.currentSongId,
-          songs: songs
+          songs: songs,
+          playing: room.playing,
         };
         io.emit('roomInfo', roomInfo);
       })

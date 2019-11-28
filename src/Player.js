@@ -17,12 +17,14 @@ export default function Player() {
     const [roomName, setRoomName] = useState('');
     const [songs, setSongs] = useState(List());
     const [currentSongId, setCurrentSongId] = useState(0);
+    const [playing, setPlaying] = useState(false);
 
     useEffect(() => {
         onRoomInfo((roomInfo) => {
             setRoomName(roomInfo.roomName);
             setCurrentSongId(roomInfo.currentSongId);
             setSongs(List(roomInfo.songs));
+            setPlaying(roomInfo.playing);
         });
 
         onSongAdded((song) => {

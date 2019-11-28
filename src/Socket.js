@@ -27,5 +27,19 @@ export function onSongAdded(cb) {
     });
 }
 
+  // state can be 'play', 'pause', 'next', 'prev'
+export function sendPlayerState(roomId, state) {
+    console.log('about to send player state: ' + state);
+    socket.emit('playerState', roomId, state);
+}
+
+export function onCurrentSongIdChange(cb) {
+    socket.on('currentSongId', (currentSongId) => cb(currentSongId));
+}
+
 socket.on('connect', () => console.log('socket connected'));
 socket.on('disconnect', (reason) => console.log('socket disconnected: ' + reason));
+
+socket.on('playerState', async (roomId, state) => {
+    console.log('socket on playerState');
+});

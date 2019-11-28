@@ -20,7 +20,7 @@ export default function CreateRoom() {
             roomName: roomName,
           })
           .then(function (response) {
-            const roomId = response.id;
+            const roomId = response.lastId;
             
             // TODO: navigate to the player page
           })

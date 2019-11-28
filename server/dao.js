@@ -11,6 +11,7 @@ module.exports = class Dao {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT,
                 currentSongId INTEGER,
+                playing INTEGER DEFAULT 0,
                 FOREIGN KEY (currentSongId)
                     REFERENCES songs (id) )`;
         const createSongTableSql = `
@@ -42,7 +43,7 @@ module.exports = class Dao {
                     console.log(err)
                     reject(err)
                 } else {
-                    resolve({ id: this.lastID })
+                    resolve({ lastId: this.lastID })
                 }
             })
         })
@@ -87,7 +88,25 @@ module.exports = class Dao {
     createRoom(name) {
         const sql = `
             INSERT INTO rooms (name)
-                VALUES ('${name}');`
+                VALUES ('${name}');`;
+        return this.run(sql);
+    }
+
+    updateRoomPlaying(roomId, playing) {
+        const sql = `
+            UPDATE rooms
+            SET playing = ${playing ? 1 : 0}
+            WHERE id = ${roomId};
+        `;
+        return this.run(sql);
+    }
+
+    updateRoomCurrentSongId(roomId, currentSongId) {
+        const sql = `
+            UPDATE rooms
+            SET currentSongId = ${currentSongId}
+            WHERE id = ${roomId};
+        `;
         return this.run(sql);
     }
 
@@ -106,4 +125,6 @@ module.exports = class Dao {
                 VALUES ('${roomId}', '${videoId}', '${title}', '${channelTitle}', '${thumbnail}');`
         return this.run(sql);
     }
+
+
 }
