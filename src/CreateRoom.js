@@ -21,11 +21,11 @@ export default function CreateRoom() {
       .post("/api/room", {
         roomName: roomName
       })
-      .then(function(response) {
+      .then(response => {
         setRoomId(response.data.lastId);
         setNavigateToClient(true);
       })
-      .catch(function(error) {
+      .catch(error => {
         console.log(error);
       });
   };
