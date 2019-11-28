@@ -125,6 +125,4 @@ module.exports = class Dao {
                 VALUES ('${roomId}', '${videoId}', '${title}', '${channelTitle}', '${thumbnail}');`
         return this.run(sql);
     }
-
-
 }
