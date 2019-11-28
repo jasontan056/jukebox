@@ -49,6 +49,7 @@ export default function Client(props) {
             <h3>Room Name: {roomName}</h3>
             <h3>CurrentSongId: {currentSongId}</h3>
             <PlayerControls roomId={roomId}
+                playing={playing}
                 disablePlayPause={disablePlayPause}
                 disableNextButton={disableNextButton}
                 disablePrevButton={disablePrevButton}/>

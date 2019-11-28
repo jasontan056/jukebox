@@ -12,13 +12,13 @@ export default function PlayerControls(props) {
     }
     const playPauseButton = props.playing ? (
         <IconButton aria-label="pause button"
-            onClick={() =>playerStateButtonClicked('play')}
+            onClick={() =>playerStateButtonClicked('pause')}
             disabled={props.disablePlayPause}>
             <PauseIcon />
         </IconButton>
     ) : (
         <IconButton aria-label="play button"
-            onClick={() => playerStateButtonClicked('pause')}
+            onClick={() => playerStateButtonClicked('play')}
             disabled={props.disablePlayPause}>
             <PlayArrowIcon />
         </IconButton>
