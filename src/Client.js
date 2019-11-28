@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import SearchComponent from './SearchComponent';
 import PlayList from './Playlist';
-import {addSong, onSongAdded, joinRoom, onRoomInfo, sendPlayerState, onCurrentSongIdChange} from './Socket';
+import {addSong, onSongAdded, joinRoom, onRoomInfo, onCurrentSongIdChange} from './Socket';
 import { List } from 'immutable';
 import {useParams} from "react-router-dom";
-import IconButton from '@material-ui/core/IconButton';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import PauseIcon from '@material-ui/icons/Pause';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import PlayerControls from './PlayerControls';
 
 export default function Client(props) {
     const [roomName, setRoomName] = useState('');
@@ -37,55 +33,25 @@ export default function Client(props) {
         joinRoom(roomId);
     }, [roomId, setRoomName, setSongs]);
 
-    const playerStateButtonClicked = (state) => {
-        sendPlayerState(roomId, state);
-    }
-    const playPauseButton = playing ? (
-        <IconButton aria-label="pause button"
-            onClick={() =>playerStateButtonClicked('play')}
-            disabled={!currentSongId}>
-            <PauseIcon />
-        </IconButton>
-    ) : (
-        <IconButton aria-label="play button"
-            onClick={() => playerStateButtonClicked('pause')}
-            disabled={!currentSongId}>
-            <PlayArrowIcon />
-        </IconButton>
-    );
-
-    const currentSongIndex =
-        songs.findIndex((song) => song.id === currentSongId);
-    const disableNextButton =
-        currentSongIndex === -1 || currentSongIndex === songs.count() - 1;
-    const nextButton = (
-        <IconButton aria-label="skip next button"
-            onClick={() => playerStateButtonClicked('next')}
-            disabled={disableNextButton}>
-            <SkipNextIcon />
-        </IconButton>
-    );
-    const prevButton = (
-        <IconButton aria-label="skip previous button"
-            onClick={() => playerStateButtonClicked('prev')}
-            disabled={currentSongIndex < 1}>
-            <SkipPreviousIcon />
-        </IconButton>
-    );
-
     let addSongToPlaylist = (song) => {
         // Send on socket to add song.
         addSong(roomId, song);
     };
 
+    const currentSongIndex =
+        songs.findIndex((song) => song.id === currentSongId);
+    const disablePlayPause = !currentSongId;
+    const disableNextButton = currentSongIndex === -1 || currentSongIndex === songs.count() - 1;
+    const disablePrevButton = currentSongIndex < 1;
     return (
         <div>
             <h3>Room ID: {roomId}</h3>
             <h3>Room Name: {roomName}</h3>
             <h3>CurrentSongId: {currentSongId}</h3>
-            {prevButton}
-            {playPauseButton}
-            {nextButton}
+            <PlayerControls roomId={roomId}
+                disablePlayPause={disablePlayPause}
+                disableNextButton={disableNextButton}
+                disablePrevButton={disablePrevButton}/>
             <PlayList songs={songs} currentSongId={currentSongId} />
             <SearchComponent onSongAdded={addSongToPlaylist} />
         </div>
