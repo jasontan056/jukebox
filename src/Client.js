@@ -13,7 +13,7 @@ import {
 import { List } from "immutable";
 import { useParams } from "react-router-dom";
 import PlayerControls from "./PlayerControls";
-import { useRouteMatch, Link, Redirect } from "react-router-dom";
+import { Redirect, useRouteMatch, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import "./Client.css";
 
@@ -87,6 +87,8 @@ export default function Client(props) {
     sendCurrentSongId(roomId, song.id);
   };
 
+  const onSearchClosed = () => setSearchOpen(false);
+
   const currentSongIndex = songs.findIndex(song => song.id === currentSongId);
   const disablePlayPause = !currentSongId;
   const disableNextButton =
@@ -107,12 +109,6 @@ export default function Client(props) {
           />
         </div>
       </div>
-      <SearchComponent
-        open={searchOpen}
-        returnUrl={routeMatch.url}
-        onSongAdded={addSongToPlaylist}
-      />
-      {!searchOpen ? <Redirect to={routeMatch.url} /> : null}
       <footer className={classes.footer}>
         <PlayerControls
           roomId={roomId}
@@ -122,6 +118,13 @@ export default function Client(props) {
           disablePrevButton={disablePrevButton}
         />
       </footer>
+      {!searchOpen ? <Redirect to={routeMatch.url} /> : null}
+      <SearchComponent
+        open={searchOpen}
+        returnUrl={routeMatch.url}
+        onSongAdded={addSongToPlaylist}
+        onDrawerClosed={onSearchClosed}
+      />
     </div>
   );
 }

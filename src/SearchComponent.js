@@ -3,7 +3,7 @@ import SearchBar from "./SearchBar";
 import SongItem from "./SongItem";
 import axios from "axios";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -52,14 +52,11 @@ export default function SearchComponent(props) {
     );
   });
 
-  const toggleDrawer = opened => {};
-
   return (
     <SwipeableDrawer
       anchor="right"
       open={props.open}
-      onClose={() => toggleDrawer(false)}
-      onOpen={() => toggleDrawer(true)}
+      onClose={props.onDrawerClosed}
     >
       <div className={classes.drawerContents}>
         <Link to={props.returnUrl}>Back</Link>
