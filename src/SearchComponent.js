@@ -3,12 +3,14 @@ import SearchBar from "./SearchBar";
 import SongItem from "./SongItem";
 import axios from "axios";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   drawerContents: {
-    width: "95vw"
+    width: "95vw",
+    background:
+      "linear-gradient(90deg, rgba(105,252,69,1) 0%, rgba(69,252,73,0.30996148459383754) 100%)"
   },
   ul: {
     listStyle: "none",
