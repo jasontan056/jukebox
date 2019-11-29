@@ -34,9 +34,7 @@ export default function Client(props) {
     onSongAdded(song => {
       setSongs(s => s.push(song));
     });
-
     onCurrentSongIdChange(id => setCurrentSongId(id));
-
     onPlayingChanged(playing => setPlaying(playing));
 
     joinRoom(roomId);
@@ -57,6 +55,7 @@ export default function Client(props) {
       <h3>Room ID: {roomId}</h3>
       <h3>Room Name: {roomName}</h3>
       <h3>CurrentSongId: {currentSongId}</h3>
+      <h3>Playing: {playing ? "playing" : "paused"}</h3>
       <PlayerControls
         roomId={roomId}
         playing={playing}

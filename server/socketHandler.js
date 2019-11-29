@@ -62,8 +62,7 @@ module.exports = function handleSockets(io, dao) {
         if (state === "play" || state === "pause") {
           const playing = state === "play";
           dao.updateRoomPlaying(roomId, playing);
-
-          socket.emit("playing", playing);
+          io.emit("playing", playing);
           return;
         }
 
