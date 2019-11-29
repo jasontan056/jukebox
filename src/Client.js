@@ -89,7 +89,7 @@ export default function Client(props) {
   return (
     <div className={classes.root}>
       <header className={classes.header}>
-        <h1 class="headerText">Jukebox</h1>
+        <h1 className="headerText">Jukebox</h1>
       </header>
       <div className={classes.main}>
         <div className={searchRouteMatch ? classes.hidden : null}>

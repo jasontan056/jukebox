@@ -60,7 +60,7 @@ export default function SongItem(props) {
     <div>
       <Paper className={paperClassName}>
         <Grid container spacing={1}>
-          <Grid item xs={2.8} className={classes.imgContainer}>
+          <Grid item xs={2} className={classes.imgContainer}>
             <img className={classes.img} alt="complex" src={props.thumbnail} />
           </Grid>
           <Grid item xs container direction="column" spacing={2} zeroMinWidth>
