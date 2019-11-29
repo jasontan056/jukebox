@@ -61,8 +61,7 @@ export default function Player() {
         videoId={videoId}
         opts={youtubePlayerOpts}
         onReady={onReady}
-        onPlay={event => sendPlayerState(roomId, "play")}
-        onPause={event => sendPlayerState(roomId, "pause")}
+        onEnd={event => sendPlayerState(roomId, "next")}
       />
     );
   } else {
