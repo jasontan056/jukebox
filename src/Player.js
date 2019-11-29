@@ -6,7 +6,8 @@ import {
   joinRoom,
   onRoomInfo,
   onCurrentSongIdChange,
-  onPlayingChanged
+  onPlayingChanged,
+  sendPlayerState
 } from "./Socket";
 import { List } from "immutable";
 
@@ -17,7 +18,8 @@ export default function Player() {
     width: "640",
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
-      autoplay: 1
+      autoplay: 1,
+      controls: 0
     }
   };
 
@@ -55,7 +57,13 @@ export default function Player() {
   let youtubePlayer;
   if (videoId) {
     youtubePlayer = (
-      <YouTube videoId={videoId} opts={youtubePlayerOpts} onReady={onReady} />
+      <YouTube
+        videoId={videoId}
+        opts={youtubePlayerOpts}
+        onReady={onReady}
+        onPlay={event => sendPlayerState(roomId, "play")}
+        onPause={event => sendPlayerState(roomId, "pause")}
+      />
     );
   } else {
     youtubePlayer = <div>Add a song!</div>;
