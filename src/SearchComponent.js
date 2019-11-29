@@ -4,7 +4,8 @@ import SongItem from "./SongItem";
 import axios from "axios";
 
 const ulStyle = {
-  listStyle: "none"
+  listStyle: "none",
+  paddingInlineStart: 0
 };
 
 export default function Search(props) {

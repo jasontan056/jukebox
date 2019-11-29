@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   paper: {
-    //  padding: theme.spacing(2),
+    padding: theme.spacing(0.5),
     margin: "auto",
     maxWidth: 500
   },
@@ -20,8 +20,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#dedede"
   },
   img: {
-    width: 109,
-    height: 81
+    width: 60,
+    height: 45
+  },
+  imgContainer: {
+    textAlign: "center"
+  },
+  addToPlaylistButton: {
+    padding: 8
   }
 }));
 
@@ -31,12 +37,15 @@ export default function SongItem(props) {
   let playlistAddButton;
   if (props.showPlaylistAddButton) {
     playlistAddButton = (
-      <IconButton
-        aria-label="playlistAdd"
-        onClick={() => props.onPlaylistAddButtonClicked()}
-      >
-        <PlaylistAddIcon />
-      </IconButton>
+      <Grid item xs={1.5}>
+        <IconButton
+          aria-label="playlistAdd"
+          className={classes.addToPlaylistButton}
+          onClick={() => props.onPlaylistAddButtonClicked()}
+        >
+          <PlaylistAddIcon />
+        </IconButton>
+      </Grid>
     );
   }
 
@@ -48,27 +57,23 @@ export default function SongItem(props) {
   }
 
   return (
-    <div className={classes.root}>
+    <div>
       <Paper className={paperClassName}>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
+        <Grid container spacing={1}>
+          <Grid item xs={2.8} className={classes.imgContainer}>
             <img className={classes.img} alt="complex" src={props.thumbnail} />
           </Grid>
-          <Grid item xs={6} container>
-            <Grid item xs container direction="column" spacing={2}>
-              <Grid item xs>
-                <Typography variant="body2" gutterBottom>
-                  {props.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {props.channelTitle}
-                </Typography>
-              </Grid>
+          <Grid item xs container direction="column" spacing={2} zeroMinWidth>
+            <Grid item xs>
+              <Typography variant="body1" noWrap>
+                {props.title}
+              </Typography>
+              <Typography variant="subtitle2" noWrap color="textSecondary">
+                {props.channelTitle}
+              </Typography>
             </Grid>
           </Grid>
-          <Grid item xs={2}>
-            {playlistAddButton}
-          </Grid>
+          {playlistAddButton}
         </Grid>
       </Paper>
     </div>

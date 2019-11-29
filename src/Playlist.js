@@ -2,11 +2,8 @@ import React from "react";
 import SongItem from "./SongItem";
 
 const ulStyle = {
-  listStyle: "none"
-};
-
-const mainStyle = {
-  //overflow: "auto"
+  listStyle: "none",
+  paddingInlineStart: 0
 };
 
 export default function PlayList(props) {
@@ -23,9 +20,5 @@ export default function PlayList(props) {
     );
   });
 
-  return (
-    <div style={mainStyle}>
-      <ul style={ulStyle}>{songItems}</ul>
-    </div>
-  );
+  return <ul style={ulStyle}>{songItems}</ul>;
 }
