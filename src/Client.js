@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import PlayerControls from "./PlayerControls";
 import { useRouteMatch, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import "./Client.css";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,15 +24,19 @@ const useStyles = makeStyles(theme => ({
     gridTemplateRows: "min-content auto min-content"
   },
   main: {
-    overflow: "auto"
+    overflow: "auto",
+    background:
+      "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
+  },
+  header: {
+    backgroundColor: "#af17bd",
+    textAlign: "center"
   },
   footer: {
     height: "50px",
     width: "100%",
-    backgroundColor:
-      theme.palette.type === "dark"
-        ? theme.palette.grey[800]
-        : theme.palette.grey[200]
+    backgroundColor: "#af17bd",
+    textAlign: "center"
   },
   hidden: {
     display: "none"
@@ -53,7 +58,6 @@ export default function Client(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    console.log("in userEffect!!!");
     onRoomInfo(roomInfo => {
       // TODO: set songs and currentSongId from roomInfo
       console.log(roomInfo);
@@ -84,7 +88,9 @@ export default function Client(props) {
   const disablePrevButton = currentSongIndex < 1;
   return (
     <div className={classes.root}>
-      <h3>Room Name: {roomName}</h3>
+      <header className={classes.header}>
+        <h1 class="headerText">Jukebox</h1>
+      </header>
       <div className={classes.main}>
         <div className={searchRouteMatch ? classes.hidden : null}>
           <Link to={`${routeMatch.url}/search`}>Search</Link>

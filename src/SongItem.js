@@ -14,10 +14,10 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(0.5),
     margin: "auto",
-    maxWidth: 500
+    backgroundColor: "#ffffff40"
   },
   paperHighlighted: {
-    backgroundColor: "#dedede"
+    backgroundColor: "#af18bd61"
   },
   img: {
     width: 60,
