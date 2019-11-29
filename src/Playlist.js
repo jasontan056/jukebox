@@ -5,6 +5,10 @@ const ulStyle = {
   listStyle: "none"
 };
 
+const mainStyle = {
+  //overflow: "auto"
+};
+
 export default function PlayList(props) {
   let songItems = props.songs.map((song, index) => {
     return (
@@ -20,8 +24,7 @@ export default function PlayList(props) {
   });
 
   return (
-    <div>
-      Playlist:
+    <div style={mainStyle}>
       <ul style={ulStyle}>{songItems}</ul>
     </div>
   );

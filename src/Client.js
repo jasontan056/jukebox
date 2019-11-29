@@ -13,10 +13,30 @@ import { List } from "immutable";
 import { useParams } from "react-router-dom";
 import PlayerControls from "./PlayerControls";
 import { useRouteMatch, Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 
-const hiddenStyle = {
-  display: "none"
-};
+const useStyles = makeStyles(theme => ({
+  root: {
+    boxSizing: "border-box",
+    height: "100vh",
+    display: "grid",
+    gridTemplateRows: "min-content auto min-content"
+  },
+  main: {
+    overflow: "auto"
+  },
+  footer: {
+    height: "50px",
+    width: "100%",
+    backgroundColor:
+      theme.palette.type === "dark"
+        ? theme.palette.grey[800]
+        : theme.palette.grey[200]
+  },
+  hidden: {
+    display: "none"
+  }
+}));
 
 export default function Client(props) {
   const [roomName, setRoomName] = useState("");
@@ -30,6 +50,7 @@ export default function Client(props) {
     strict: true,
     sensitive: true
   });
+  const classes = useStyles();
 
   useEffect(() => {
     console.log("in userEffect!!!");
@@ -62,12 +83,19 @@ export default function Client(props) {
     currentSongIndex === -1 || currentSongIndex === songs.count() - 1;
   const disablePrevButton = currentSongIndex < 1;
   return (
-    <div>
-      <h3>Room ID: {roomId}</h3>
+    <div className={classes.root}>
       <h3>Room Name: {roomName}</h3>
-      <h3>CurrentSongId: {currentSongId}</h3>
-      <h3>Playing: {playing ? "playing" : "paused"}</h3>
-      <div style={searchRouteMatch ? hiddenStyle : null}>
+      <div className={classes.main}>
+        <div className={searchRouteMatch ? classes.hidden : null}>
+          <Link to={`${routeMatch.url}/search`}>Search</Link>
+          <PlayList songs={songs} currentSongId={currentSongId} />
+        </div>
+        <div className={searchRouteMatch ? null : classes.hidden}>
+          <Link to={`${routeMatch.url}`}>Back</Link>
+          <SearchComponent onSongAdded={addSongToPlaylist} />
+        </div>
+      </div>
+      <footer className={classes.footer}>
         <PlayerControls
           roomId={roomId}
           playing={playing}
@@ -75,13 +103,7 @@ export default function Client(props) {
           disableNextButton={disableNextButton}
           disablePrevButton={disablePrevButton}
         />
-        <Link to={`${routeMatch.url}/search`}>Search</Link>
-        <PlayList songs={songs} currentSongId={currentSongId} />
-      </div>
-      <div style={searchRouteMatch ? null : hiddenStyle}>
-        <Link to={`${routeMatch.url}`}>Back</Link>
-        <SearchComponent onSongAdded={addSongToPlaylist} />
-      </div>
+      </footer>
     </div>
   );
 }
