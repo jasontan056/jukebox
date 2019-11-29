@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import SearchBar from "./SearchBar";
 import SongItem from "./SongItem";
 import axios from "axios";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import { Link } from "react-router-dom";
 
 const ulStyle = {
   listStyle: "none",
   paddingInlineStart: 0
 };
 
-export default function Search(props) {
+export default function SearchComponent(props) {
   const [songs, setSongs] = useState([]);
 
   let handleSubmit = async term => {
@@ -43,10 +45,18 @@ export default function Search(props) {
     );
   });
 
+  const toggleDrawer = opened => {};
+
   return (
-    <div>
+    <SwipeableDrawer
+      anchor="right"
+      open={props.open}
+      onClose={() => toggleDrawer(false)}
+      onOpen={() => toggleDrawer(true)}
+    >
+      <Link to={props.returnUrl}>Back</Link>
       <SearchBar handleSubmit={handleSubmit} />
       <ul style={ulStyle}>{songItems}</ul>
-    </div>
+    </SwipeableDrawer>
   );
 }

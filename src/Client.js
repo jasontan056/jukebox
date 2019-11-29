@@ -13,7 +13,7 @@ import {
 import { List } from "immutable";
 import { useParams } from "react-router-dom";
 import PlayerControls from "./PlayerControls";
-import { useRouteMatch, Link } from "react-router-dom";
+import { useRouteMatch, Link, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import "./Client.css";
 
@@ -50,12 +50,14 @@ export default function Client(props) {
   const [currentSongId, setCurrentSongId] = useState(null);
   const { roomId } = useParams();
   const [playing, setPlaying] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const routeMatch = useRouteMatch();
   const searchRouteMatch = useRouteMatch({
     path: `${routeMatch.path}/search`,
     strict: true,
     sensitive: true
   });
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -77,6 +79,10 @@ export default function Client(props) {
     joinRoom(roomId);
   }, [roomId, setRoomName, setSongs]);
 
+  useEffect(() => {
+    setSearchOpen(searchRouteMatch != null);
+  }, [searchRouteMatch, setSearchOpen]);
+
   const addSongToPlaylist = song => {
     addSong(roomId, song);
   };
@@ -95,7 +101,7 @@ export default function Client(props) {
         <h1 className="headerText">Jukebox</h1>
       </header>
       <div className={classes.main}>
-        <div className={searchRouteMatch ? classes.hidden : null}>
+        <div>
           <Link to={`${routeMatch.url}/search`}>Search</Link>
           <PlayList
             songs={songs}
@@ -103,11 +109,13 @@ export default function Client(props) {
             onSongClicked={handleSongClicked}
           />
         </div>
-        <div className={searchRouteMatch ? null : classes.hidden}>
-          <Link to={`${routeMatch.url}`}>Back</Link>
-          <SearchComponent onSongAdded={addSongToPlaylist} />
-        </div>
       </div>
+      <SearchComponent
+        open={searchOpen}
+        returnUrl={routeMatch.url}
+        onSongAdded={addSongToPlaylist}
+      />
+      {!searchOpen ? <Redirect to={routeMatch.url} /> : null}
       <footer className={classes.footer}>
         <PlayerControls
           roomId={roomId}

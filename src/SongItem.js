@@ -58,7 +58,7 @@ export default function SongItem(props) {
   }
 
   return (
-    <div onClick={e => props.onClick(e)}>
+    <div onClick={e => props.onClick && props.onClick(e)}>
       <Paper className={paperClassName}>
         <Grid container spacing={1}>
           <Grid item xs={2} className={classes.imgContainer}>
