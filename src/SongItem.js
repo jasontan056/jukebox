@@ -27,7 +27,8 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center"
   },
   addToPlaylistButton: {
-    padding: 8
+    padding: 0,
+    paddingTop: 10
   }
 }));
 
@@ -37,7 +38,7 @@ export default function SongItem(props) {
   let playlistAddButton;
   if (props.showPlaylistAddButton) {
     playlistAddButton = (
-      <Grid item xs={1.5}>
+      <Grid item xs={1}>
         <IconButton
           aria-label="playlistAdd"
           className={classes.addToPlaylistButton}
@@ -57,7 +58,7 @@ export default function SongItem(props) {
   }
 
   return (
-    <div>
+    <div onClick={e => props.onClick(e)}>
       <Paper className={paperClassName}>
         <Grid container spacing={1}>
           <Grid item xs={2} className={classes.imgContainer}>
