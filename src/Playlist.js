@@ -3,6 +3,7 @@ import SongItem from "./SongItem";
 
 const ulStyle = {
   listStyle: "none",
+  margin: 0,
   paddingInlineStart: 0
 };
 

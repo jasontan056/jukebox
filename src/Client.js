@@ -33,9 +33,12 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     backgroundColor: "#af17bd",
-    textAlign: "center"
+    textAlign: "center",
+    display: "flex"
   },
-  searchButton: {},
+  searchButton: {
+    paddingRight: 15
+  },
   footer: {
     height: "50px",
     width: "100%",

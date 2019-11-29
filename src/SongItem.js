@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#ffffff40"
   },
   paperHighlighted: {
-    backgroundColor: "#af18bd61"
+    backgroundColor: "#ffffff75"
   },
   img: {
     width: 55,
