@@ -20,8 +20,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#dedede"
   },
   img: {
-    width: 120,
-    height: 90
+    width: 109,
+    height: 81
   }
 }));
 
@@ -51,10 +51,10 @@ export default function SongItem(props) {
     <div className={classes.root}>
       <Paper className={paperClassName}>
         <Grid container spacing={2}>
-          <Grid item>
+          <Grid item xs={4}>
             <img className={classes.img} alt="complex" src={props.thumbnail} />
           </Grid>
-          <Grid item xs={12} sm container>
+          <Grid item xs={6} container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <Typography variant="body2" gutterBottom>
@@ -66,7 +66,9 @@ export default function SongItem(props) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid>{playlistAddButton}</Grid>
+          <Grid item xs={2}>
+            {playlistAddButton}
+          </Grid>
         </Grid>
       </Paper>
     </div>
