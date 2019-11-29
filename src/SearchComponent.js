@@ -3,8 +3,9 @@ import SearchBar from "./SearchBar";
 import SongItem from "./SongItem";
 import axios from "axios";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles(theme => ({
   drawerContents: {
@@ -15,13 +16,28 @@ const useStyles = makeStyles(theme => ({
     background:
       "linear-gradient(90deg, rgba(105,252,69,1) 0%, rgba(69,252,73,0.30996148459383754) 100%)"
   },
+  searchBarGroup: {
+    display: "flex"
+  },
+  backButton: {
+    verticalAlign: "middle",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingRight: 5
+  },
+  searchBar: {
+    flexGrow: 1,
+    paddingRight: 12
+  },
   searchResults: {
     width: "inherit",
     overflow: "auto"
   },
   ul: {
     listStyle: "none",
-    paddingInlineStart: 0
+    paddingInlineStart: 0,
+    margin: 0
   }
 }));
 
@@ -68,9 +84,13 @@ export default function SearchComponent(props) {
       onClose={props.onDrawerClosed}
     >
       <div className={classes.drawerContents}>
-        <div>
-          <Link to={props.returnUrl}>Back</Link>
-          <SearchBar handleSubmit={handleSubmit} />
+        <div className={classes.searchBarGroup}>
+          <IconButton aria-label="back" onClick={props.onDrawerClosed}>
+            <ArrowBackIcon />
+          </IconButton>
+          <div className={classes.searchBar}>
+            <SearchBar handleSubmit={handleSubmit} />
+          </div>
         </div>
         <div className={classes.searchResults}>
           <ul className={classes.ul}>{songItems}</ul>

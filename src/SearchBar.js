@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import SearchIcon from "@material-ui/icons/Search";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -32,9 +34,17 @@ export default function SearchBar(props) {
         <TextField
           className={classes.textField}
           fullWidth
-          label="Song Search"
+          variant="filled"
+          label="Find your jam!"
           margin="normal"
           onChange={handleChange}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            )
+          }}
         />
       </div>
     </form>
