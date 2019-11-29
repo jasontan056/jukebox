@@ -7,7 +7,8 @@ import {
   joinRoom,
   onRoomInfo,
   onCurrentSongIdChange,
-  onPlayingChanged
+  onPlayingChanged,
+  sendCurrentSongId
 } from "./Socket";
 import { List } from "immutable";
 import { useParams } from "react-router-dom";
@@ -76,9 +77,11 @@ export default function Client(props) {
     joinRoom(roomId);
   }, [roomId, setRoomName, setSongs]);
 
-  let addSongToPlaylist = song => {
-    // Send on socket to add song.
+  const addSongToPlaylist = song => {
     addSong(roomId, song);
+  };
+  const handleSongClicked = song => {
+    sendCurrentSongId(roomId, song.id);
   };
 
   const currentSongIndex = songs.findIndex(song => song.id === currentSongId);
@@ -94,7 +97,11 @@ export default function Client(props) {
       <div className={classes.main}>
         <div className={searchRouteMatch ? classes.hidden : null}>
           <Link to={`${routeMatch.url}/search`}>Search</Link>
-          <PlayList songs={songs} currentSongId={currentSongId} />
+          <PlayList
+            songs={songs}
+            currentSongId={currentSongId}
+            onSongClicked={handleSongClicked}
+          />
         </div>
         <div className={searchRouteMatch ? null : classes.hidden}>
           <Link to={`${routeMatch.url}`}>Back</Link>

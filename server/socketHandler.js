@@ -23,6 +23,15 @@ module.exports = function handleSockets(io, dao) {
       }
     });
 
+    socket.on("currentSongId", async (roomId, currentSongId) => {
+      try {
+        await dao.updateRoomCurrentSongId(roomId, currentSongId);
+        io.emit("currentSongId", currentSongId);
+      } catch (e) {
+        console.log("Couldn't update current song id: " + e);
+      }
+    });
+
     socket.on("addSong", async (roomId, song) => {
       console.log("server handling addSong");
       console.log(roomId);
