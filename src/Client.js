@@ -12,6 +12,11 @@ import {
 import { List } from "immutable";
 import { useParams } from "react-router-dom";
 import PlayerControls from "./PlayerControls";
+import { useRouteMatch, Link } from "react-router-dom";
+
+const hiddenStyle = {
+  display: "none"
+};
 
 export default function Client(props) {
   const [roomName, setRoomName] = useState("");
@@ -19,6 +24,12 @@ export default function Client(props) {
   const [currentSongId, setCurrentSongId] = useState(null);
   const { roomId } = useParams();
   const [playing, setPlaying] = useState(false);
+  const routeMatch = useRouteMatch();
+  const searchRouteMatch = useRouteMatch({
+    path: `${routeMatch.path}/search`,
+    strict: true,
+    sensitive: true
+  });
 
   useEffect(() => {
     console.log("in userEffect!!!");
@@ -56,15 +67,21 @@ export default function Client(props) {
       <h3>Room Name: {roomName}</h3>
       <h3>CurrentSongId: {currentSongId}</h3>
       <h3>Playing: {playing ? "playing" : "paused"}</h3>
-      <PlayerControls
-        roomId={roomId}
-        playing={playing}
-        disablePlayPause={disablePlayPause}
-        disableNextButton={disableNextButton}
-        disablePrevButton={disablePrevButton}
-      />
-      <PlayList songs={songs} currentSongId={currentSongId} />
-      <SearchComponent onSongAdded={addSongToPlaylist} />
+      <div style={searchRouteMatch ? hiddenStyle : null}>
+        <PlayerControls
+          roomId={roomId}
+          playing={playing}
+          disablePlayPause={disablePlayPause}
+          disableNextButton={disableNextButton}
+          disablePrevButton={disablePrevButton}
+        />
+        <Link to={`${routeMatch.url}/search`}>Search</Link>
+        <PlayList songs={songs} currentSongId={currentSongId} />
+      </div>
+      <div style={searchRouteMatch ? null : hiddenStyle}>
+        <Link to={`${routeMatch.url}`}>Back</Link>
+        <SearchComponent onSongAdded={addSongToPlaylist} />
+      </div>
     </div>
   );
 }
