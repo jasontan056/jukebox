@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Client(props) {
+  const classes = useStyles();
   const [roomName, setRoomName] = useState("");
   const [songs, setSongs] = useState(List());
   const [currentSongId, setCurrentSongId] = useState(null);
@@ -58,12 +59,8 @@ export default function Client(props) {
     sensitive: true
   });
 
-  const classes = useStyles();
-
   useEffect(() => {
     onRoomInfo(roomInfo => {
-      // TODO: set songs and currentSongId from roomInfo
-      console.log(roomInfo);
       setRoomName(roomInfo.roomName);
       setCurrentSongId(roomInfo.currentSongId);
       setSongs(List(roomInfo.songs));
@@ -98,7 +95,7 @@ export default function Client(props) {
   return (
     <div className={classes.root}>
       <header className={classes.header}>
-        <h1 className="headerText">Jukebox</h1>
+        <h1 className="headerText">{roomName} Jukebox</h1>
       </header>
       <div className={classes.main}>
         <div>

@@ -4,13 +4,20 @@ import SongItem from "./SongItem";
 import axios from "axios";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 
-const ulStyle = {
-  listStyle: "none",
-  paddingInlineStart: 0
-};
+const useStyles = makeStyles(theme => ({
+  drawerContents: {
+    width: "95vw"
+  },
+  ul: {
+    listStyle: "none",
+    paddingInlineStart: 0
+  }
+}));
 
 export default function SearchComponent(props) {
+  const classes = useStyles();
   const [songs, setSongs] = useState([]);
 
   let handleSubmit = async term => {
@@ -54,9 +61,11 @@ export default function SearchComponent(props) {
       onClose={() => toggleDrawer(false)}
       onOpen={() => toggleDrawer(true)}
     >
-      <Link to={props.returnUrl}>Back</Link>
-      <SearchBar handleSubmit={handleSubmit} />
-      <ul style={ulStyle}>{songItems}</ul>
+      <div className={classes.drawerContents}>
+        <Link to={props.returnUrl}>Back</Link>
+        <SearchBar handleSubmit={handleSubmit} />
+        <ul className={classes.ul}>{songItems}</ul>
+      </div>
     </SwipeableDrawer>
   );
 }

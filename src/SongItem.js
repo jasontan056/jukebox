@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#af18bd61"
   },
   img: {
-    width: 60,
+    width: 55,
     height: 45
   },
   imgContainer: {
