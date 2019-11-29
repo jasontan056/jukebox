@@ -82,6 +82,7 @@ export default function SearchComponent(props) {
       anchor="right"
       open={props.open}
       onClose={props.onDrawerClosed}
+      onOpen={() => console.log("Search drawer opened.")}
     >
       <div className={classes.drawerContents}>
         <div className={classes.searchBarGroup}>
