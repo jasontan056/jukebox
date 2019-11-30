@@ -29,7 +29,7 @@ export default function Player() {
   const [currentSongId, setCurrentSongId] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [youtubeTarget, setYoutubeTarget] = useState(null);
-  const clientUrl = `${window.location.host}/client/${roomId}`;
+  const clientUrl = `https://${window.location.host}/client/${roomId}`;
 
   useEffect(() => {
     onRoomInfo(roomInfo => {
