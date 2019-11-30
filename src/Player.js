@@ -10,6 +10,7 @@ import {
   sendPlayerState
 } from "./Socket";
 import { List } from "immutable";
+import QRCode from "qrcode.react";
 
 export default function Player() {
   const { roomId } = useParams();
@@ -28,6 +29,7 @@ export default function Player() {
   const [currentSongId, setCurrentSongId] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [youtubeTarget, setYoutubeTarget] = useState(null);
+  const clientUrl = `${window.location.host}/client/${roomId}`;
 
   useEffect(() => {
     onRoomInfo(roomInfo => {
@@ -79,6 +81,7 @@ export default function Player() {
       <h3>CurrentSongId: {currentSongId}</h3>
       <h3>Playing: {playing ? "playing" : "paused"}</h3>
       {youtubePlayer}
+      <QRCode value={clientUrl} />
     </div>
   );
 }
