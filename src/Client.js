@@ -20,14 +20,16 @@ import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  main: {
     boxSizing: "border-box",
     height: "100vh",
+    positon: "fixed",
     display: "grid",
     gridTemplateRows: "min-content auto min-content"
   },
-  main: {
+  playlist: {
     overflow: "auto",
+    paddingBottom: 50,
     background:
       "linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
   },
@@ -40,6 +42,8 @@ const useStyles = makeStyles(theme => ({
     paddingRight: 15
   },
   footer: {
+    position: "fixed",
+    bottom: 0,
     height: "50px",
     width: "100%",
     backgroundColor: "#af17bd",
@@ -104,28 +108,36 @@ export default function Client(props) {
     currentSongIndex === -1 || currentSongIndex === songs.count() - 1;
   const disablePrevButton = currentSongIndex < 1;
   return (
-    <div className={classes.root}>
+    <div>
       {redirectToSearch && <Redirect push to={`${routeMatch.url}/search`} />}
       {redirectBack && <Redirect to={routeMatch.url} />}
-      <header className={classes.header}>
-        <h1 className="headerText">{roomName} Jukebox</h1>
-        <IconButton
-          aria-label="search"
-          className={classes.searchButton}
-          onClick={onSearchButtonClicked}
-        >
-          <SearchIcon />
-        </IconButton>
-      </header>
       <div className={classes.main}>
-        <div>
-          <PlayList
-            songs={songs}
-            currentSongId={currentSongId}
-            onSongClicked={handleSongClicked}
-          />
+        <header className={classes.header}>
+          <h1 className="headerText">{roomName} Jukebox</h1>
+          <IconButton
+            aria-label="search"
+            className={classes.searchButton}
+            onClick={onSearchButtonClicked}
+          >
+            <SearchIcon />
+          </IconButton>
+        </header>
+        <div className={classes.playlist}>
+          <div>
+            <PlayList
+              songs={songs}
+              currentSongId={currentSongId}
+              onSongClicked={handleSongClicked}
+            />
+          </div>
         </div>
       </div>
+      <SearchComponent
+        open={searchOpen}
+        returnUrl={routeMatch.url}
+        onSongAdded={addSongToPlaylist}
+        onDrawerClosed={onSearchClosed}
+      />
       <footer className={classes.footer}>
         <PlayerControls
           roomId={roomId}
@@ -135,12 +147,6 @@ export default function Client(props) {
           disablePrevButton={disablePrevButton}
         />
       </footer>
-      <SearchComponent
-        open={searchOpen}
-        returnUrl={routeMatch.url}
-        onSongAdded={addSongToPlaylist}
-        onDrawerClosed={onSearchClosed}
-      />
     </div>
   );
 }
