@@ -29,7 +29,8 @@ const useStyles = makeStyles(theme => ({
     gridTemplateRows: "min-content auto min-content"
   },
   playlist: {
-    overflow: "auto",
+    overflowX: "hidden",
+    overflowY: "auto",
     paddingBottom: 50,
     background:
       "linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
