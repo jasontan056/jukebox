@@ -127,7 +127,7 @@ module.exports = function handleSockets(io, dao) {
             songs: songs,
             playing: room.playing
           };
-          io.emit("roomInfo", roomInfo);
+          socket.emit("roomInfo", roomInfo);
         })
         .catch(err => {
           console.log("Got error getting room info: " + err);
