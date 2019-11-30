@@ -116,7 +116,7 @@ export default function Client(props) {
       {redirectBack && <Redirect to={routeMatch.url} />}
       <div className={classes.main}>
         <header className={classes.header}>
-          <h1 className="headerText">{roomName} Jukebox</h1>
+          <h1 className="headerText">{`${roomName} Jukebox`}</h1>
           <IconButton
             aria-label="search"
             className={classes.searchButton}
