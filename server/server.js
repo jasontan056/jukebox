@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, "../build")));
 app.use(bodyParser.urlencoded({ extended: "true" })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());
 
-const dbFile = path.join(__dirname, "../data", "sqlite.db");
+const dbFile = path.join(__dirname, "../.data", "sqlite.db");
 const dao = new Dao(dbFile);
 
 handleSockets(io, dao);
