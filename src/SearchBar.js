@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -40,7 +41,12 @@ const SearchBar = React.forwardRef((props, ref) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <SearchIcon />
+              <IconButton
+                aria-label="search"
+                onClick={() => props.handleSubmit(term)}
+              >
+                <SearchIcon />
+              </IconButton>
             </InputAdornment>
           )
         }}
