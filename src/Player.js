@@ -20,20 +20,20 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(theme => ({
   root: {},
   body: {
-    display: "flex",
+    display: "flex"
+  },
+  player: {
+    textAlign: "center",
     background:
       "linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
   },
-  player: {
-    flexGrow: 2,
-    textAlign: "center"
-  },
   playlist: {
+    flexGrow: 1,
     height: "100vh",
     overflowX: "hidden",
     overflowY: "auto",
     background:
-      "linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
+      "linear-gradient(90deg, rgba(252,176,69,1) 0%, rgba(253,29,29,1) 100%)"
   },
   header: {
     backgroundColor: "#af17bd",
