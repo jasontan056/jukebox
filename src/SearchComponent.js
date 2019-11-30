@@ -6,6 +6,7 @@ import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { List } from "immutable";
 
 const useStyles = makeStyles(theme => ({
   drawerContents: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchComponent(props) {
   const classes = useStyles();
-  const [songs, setSongs] = useState([]);
+  const [songs, setSongs] = useState(List());
 
   let handleSubmit = async term => {
     // TODO: Should clear previous search terms here.
@@ -53,14 +54,14 @@ export default function SearchComponent(props) {
       results = await axios.get("/api/search", {
         params: { searchTerm: term }
       });
-      setSongs(results.data);
+      setSongs(List(results.data));
     } catch (e) {
       console.log("Got error searching: " + e);
       return;
     }
   };
 
-  let songItems = songs.map((song, index) => {
+  const songItems = songs.map((song, index) => {
     let onSongAdded = () => {
       props.onSongAdded(song);
     };
@@ -77,16 +78,21 @@ export default function SearchComponent(props) {
     );
   });
 
+  const onDrawerClosed = () => {
+    props.onDrawerClosed();
+    console.log("!!! clearing all songs");
+    setSongs(List());
+  };
   return (
     <SwipeableDrawer
       anchor="right"
       open={props.open}
-      onClose={props.onDrawerClosed}
+      onClose={onDrawerClosed}
       onOpen={() => console.log("Search drawer opened.")}
     >
       <div className={classes.drawerContents}>
         <div className={classes.searchBarGroup}>
-          <IconButton aria-label="back" onClick={props.onDrawerClosed}>
+          <IconButton aria-label="back" onClick={onDrawerClosed}>
             <ArrowBackIcon />
           </IconButton>
           <div className={classes.searchBar}>
