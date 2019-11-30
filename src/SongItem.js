@@ -29,6 +29,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const parser = new DOMParser();
+const convertCharCodes = text => {
+  return parser.parseFromString(`<!doctype html><body>${text}`, "text/html")
+    .body.textContent;
+};
 export default function SongItem(props) {
   const classes = useStyles();
 
@@ -64,10 +69,10 @@ export default function SongItem(props) {
           <Grid item xs container direction="column" spacing={2} zeroMinWidth>
             <Grid item xs>
               <Typography variant="body1" noWrap>
-                {props.title}
+                {convertCharCodes(props.title)}
               </Typography>
               <Typography variant="subtitle2" noWrap color="textSecondary">
-                {props.channelTitle}
+                {convertCharCodes(props.channelTitle)}
               </Typography>
             </Grid>
           </Grid>
