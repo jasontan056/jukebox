@@ -105,7 +105,7 @@ export default function Client(props) {
   const disablePrevButton = currentSongIndex < 1;
   return (
     <div className={classes.root}>
-      {redirectToSearch && <Redirect to={`${routeMatch.url}/search`} />}
+      {redirectToSearch && <Redirect push to={`${routeMatch.url}/search`} />}
       {redirectBack && <Redirect to={routeMatch.url} />}
       <header className={classes.header}>
         <h1 className="headerText">{roomName} Jukebox</h1>
