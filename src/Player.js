@@ -37,8 +37,7 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     backgroundColor: "#af17bd",
-    textAlign: "center",
-    display: "flex"
+    textAlign: "center"
   }
 }));
 

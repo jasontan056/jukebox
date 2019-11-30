@@ -37,8 +37,11 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     backgroundColor: "#af17bd",
-    textAlign: "center",
     display: "flex"
+  },
+  logo: {
+    flexGrow: 1,
+    textAlign: "center"
   },
   searchButton: {
     paddingRight: 15
@@ -116,7 +119,7 @@ export default function Client(props) {
       {redirectBack && <Redirect to={routeMatch.url} />}
       <div className={classes.main}>
         <header className={classes.header}>
-          <JukeboxLogo roomName={roomName} />
+          <JukeboxLogo className={classes.logo} roomName={roomName} />
           <IconButton
             aria-label="search"
             className={classes.searchButton}
