@@ -126,13 +126,11 @@ export default function Client(props) {
           </IconButton>
         </header>
         <div className={classes.playlist}>
-          <div>
-            <PlayList
-              songs={songs}
-              currentSongId={currentSongId}
-              onSongClicked={handleSongClicked}
-            />
-          </div>
+          <PlayList
+            songs={songs}
+            currentSongId={currentSongId}
+            onSongClicked={handleSongClicked}
+          />
         </div>
       </div>
       <SearchComponent

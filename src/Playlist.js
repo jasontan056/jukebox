@@ -17,7 +17,7 @@ export default function PlayList(props) {
       <li key={index}>
         <SongItem
           style={songItemStyle}
-          onClick={() => props.onSongClicked(song)}
+          onClick={() => props.onSongClicked && props.onSongClicked(song)}
           title={song.title}
           channelTitle={song.channelTitle}
           thumbnail={song.thumbnail}

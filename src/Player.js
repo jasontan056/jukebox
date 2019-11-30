@@ -7,16 +7,47 @@ import {
   onRoomInfo,
   onCurrentSongIdChange,
   onPlayingChanged,
-  sendPlayerState
+  sendPlayerState,
+  onReconnect
 } from "./Socket";
 import { List } from "immutable";
 import QRCode from "qrcode.react";
+import JukeboxLogo from "./JukeboxLogo";
+import { makeStyles } from "@material-ui/core/styles";
+import PlayList from "./Playlist";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles(theme => ({
+  root: {},
+  body: {
+    display: "flex",
+    background:
+      "linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
+  },
+  player: {
+    flexGrow: 2,
+    textAlign: "center"
+  },
+  playlist: {
+    height: "100vh",
+    overflowX: "hidden",
+    overflowY: "auto",
+    background:
+      "linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%)"
+  },
+  header: {
+    backgroundColor: "#af17bd",
+    textAlign: "center",
+    display: "flex"
+  }
+}));
 
 export default function Player() {
+  const classes = useStyles();
   const { roomId } = useParams();
   const youtubePlayerOpts = {
-    height: "390",
-    width: "640",
+    height: "576",
+    width: "1024",
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
       autoplay: 1,
@@ -31,6 +62,7 @@ export default function Player() {
   const [youtubeTarget, setYoutubeTarget] = useState(null);
   const clientUrl = `https://${window.location.host}/client/${roomId}`;
 
+  // Subscribe to sockets.
   useEffect(() => {
     onRoomInfo(roomInfo => {
       setRoomName(roomInfo.roomName);
@@ -38,15 +70,20 @@ export default function Player() {
       setSongs(List(roomInfo.songs));
       setPlaying(roomInfo.playing);
     });
-    onSongAdded(song => setSongs(s => s.push(song)));
+    onSongAdded(song => {
+      setSongs(s => s.push(song));
+    });
+    onCurrentSongIdChange(id => setCurrentSongId(id));
     onPlayingChanged(playing => setPlaying(playing));
-    onCurrentSongIdChange(currentSongId => setCurrentSongId(currentSongId));
+  }, []);
 
+  useEffect(() => {
+    onReconnect(() => joinRoom(roomId));
     joinRoom(roomId);
-  }, [roomId, setRoomName, setSongs]);
+  }, [roomId]);
 
   let videoId = null;
-  if (setCurrentSongId) {
+  if (currentSongId) {
     const currentSong = songs.find(song => song.id === currentSongId);
     videoId = currentSong ? currentSong.videoId : null;
   }
@@ -67,7 +104,11 @@ export default function Player() {
       />
     );
   } else {
-    youtubePlayer = <div>Add a song!</div>;
+    youtubePlayer = (
+      <Typography variant="h4" noWrap>
+        Scan to add a song!
+      </Typography>
+    );
   }
 
   if (youtubeTarget) {
@@ -75,13 +116,19 @@ export default function Player() {
   }
 
   return (
-    <div>
-      <h3>Room ID: {roomId}</h3>
-      <h3>Room Name: {roomName}</h3>
-      <h3>CurrentSongId: {currentSongId}</h3>
-      <h3>Playing: {playing ? "playing" : "paused"}</h3>
-      {youtubePlayer}
-      <QRCode value={clientUrl} />
+    <div className={classes.root}>
+      <header className={classes.header}>
+        <JukeboxLogo roomName={roomName} />
+      </header>
+      <div className={classes.body}>
+        <div className={classes.player}>
+          {youtubePlayer}
+          <QRCode value={clientUrl} />
+        </div>
+        <div className={classes.playlist}>
+          <PlayList songs={songs} currentSongId={currentSongId} />
+        </div>
+      </div>
     </div>
   );
 }
