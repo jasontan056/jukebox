@@ -8,9 +8,6 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import classNames from "classnames";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
   paper: {
     padding: theme.spacing(0.5),
     margin: "auto",
@@ -58,7 +55,7 @@ export default function SongItem(props) {
   }
 
   return (
-    <div onClick={e => props.onClick && props.onClick(e)}>
+    <div style={props.style} onClick={e => props.onClick && props.onClick(e)}>
       <Paper className={paperClassName}>
         <Grid container spacing={1}>
           <Grid item xs={2} className={classes.imgContainer}>
