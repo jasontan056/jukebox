@@ -56,6 +56,7 @@ export default function SearchComponent(props) {
         params: { searchTerm: term }
       });
       setSongs(List(results.data));
+      searchBarRef.current.blur();
     } catch (e) {
       console.log("Got error searching: " + e);
       return;
