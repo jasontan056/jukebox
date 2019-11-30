@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import SongItem from "./SongItem";
 import axios from "axios";
@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 export default function SearchComponent(props) {
   const classes = useStyles();
   const [songs, setSongs] = useState(List());
+  const searchBarRef = useRef(null);
 
   let handleSubmit = async term => {
     // TODO: Should clear previous search terms here.
@@ -84,12 +85,23 @@ export default function SearchComponent(props) {
     );
   });
 
+  useEffect(() => {
+    if (!props.open) {
+      return;
+    }
+
+    // TODO: There has to be a less hacky way to do this.
+    setTimeout(() => {
+      searchBarRef.current && searchBarRef.current.focus();
+    }, 100);
+  }, [props.open, searchBarRef]);
+
   return (
     <SwipeableDrawer
       anchor="right"
       open={props.open}
       onClose={onDrawerClosed}
-      onOpen={() => console.log("Search drawer opened.")}
+      onOpen={() => console.log("Drawer requesting to open")}
     >
       <div className={classes.drawerContents}>
         <div className={classes.searchBarGroup}>
@@ -97,7 +109,7 @@ export default function SearchComponent(props) {
             <ArrowBackIcon />
           </IconButton>
           <div className={classes.searchBar}>
-            <SearchBar handleSubmit={handleSubmit} />
+            <SearchBar ref={searchBarRef} handleSubmit={handleSubmit} />
           </div>
         </div>
         <div className={classes.searchResults}>

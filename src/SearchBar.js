@@ -9,9 +9,8 @@ const useStyles = makeStyles(theme => ({
   textField: {}
 }));
 
-export default function SearchBar(props) {
+const SearchBar = React.forwardRef((props, ref) => {
   const classes = useStyles();
-
   const [term, setTerm] = useState("");
 
   let handleSubmit = event => {
@@ -30,23 +29,24 @@ export default function SearchBar(props) {
       autoComplete="off"
       onSubmit={handleSubmit}
     >
-      <div>
-        <TextField
-          className={classes.textField}
-          fullWidth
-          variant="filled"
-          label="Find your jam!"
-          margin="normal"
-          onChange={handleChange}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon />
-              </InputAdornment>
-            )
-          }}
-        />
-      </div>
+      <TextField
+        inputRef={ref}
+        className={classes.textField}
+        fullWidth
+        variant="filled"
+        label="Find your jam!"
+        margin="normal"
+        onChange={handleChange}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <SearchIcon />
+            </InputAdornment>
+          )
+        }}
+      />
     </form>
   );
-}
+});
+
+export default SearchBar;
