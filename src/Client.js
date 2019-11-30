@@ -16,9 +16,9 @@ import { useParams } from "react-router-dom";
 import PlayerControls from "./PlayerControls";
 import { Redirect, useRouteMatch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import "./Client.css";
 import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
+import JukeboxLogo from "./JukeboxLogo";
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -116,7 +116,7 @@ export default function Client(props) {
       {redirectBack && <Redirect to={routeMatch.url} />}
       <div className={classes.main}>
         <header className={classes.header}>
-          <h1 className="headerText">{`${roomName} Jukebox`}</h1>
+          <JukeboxLogo roomName={roomName} />
           <IconButton
             aria-label="search"
             className={classes.searchButton}
