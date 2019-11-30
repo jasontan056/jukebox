@@ -31,7 +31,7 @@ export default function CreateRoom() {
   };
 
   if (navigateToClient) {
-    return <Redirect to={`/player/${roomId}`} />;
+    return <Redirect push to={`/player/${roomId}`} />;
   }
 
   let handleChange = event => {
