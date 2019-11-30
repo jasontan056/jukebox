@@ -61,9 +61,15 @@ export default function SearchComponent(props) {
     }
   };
 
+  const onDrawerClosed = () => {
+    props.onDrawerClosed();
+    setSongs(List());
+  };
+
   const songItems = songs.map((song, index) => {
     let onSongAdded = () => {
       props.onSongAdded(song);
+      onDrawerClosed();
     };
     return (
       <li key={index}>
@@ -78,11 +84,6 @@ export default function SearchComponent(props) {
     );
   });
 
-  const onDrawerClosed = () => {
-    props.onDrawerClosed();
-    console.log("!!! clearing all songs");
-    setSongs(List());
-  };
   return (
     <SwipeableDrawer
       anchor="right"
