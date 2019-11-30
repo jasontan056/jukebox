@@ -1,6 +1,10 @@
 module.exports = function handleSockets(io, dao) {
   const roomToSockets = {};
 
+  const emitToSocketsInRoom = (roomId, message, ...args) => {
+    roomToSockets[roomId].forEach(socket => socket.emit(message, ...args));
+  };
+
   io.on("connection", socket => {
     console.log("a user connected");
     let currentRoom;
@@ -26,7 +30,7 @@ module.exports = function handleSockets(io, dao) {
     socket.on("currentSongId", async (roomId, currentSongId) => {
       try {
         await dao.updateRoomCurrentSongId(roomId, currentSongId);
-        io.emit("currentSongId", currentSongId);
+        emitToSocketsInRoom(roomId, "currentSongId", currentSongId);
       } catch (e) {
         console.log("Couldn't update current song id: " + e);
       }
@@ -36,21 +40,20 @@ module.exports = function handleSockets(io, dao) {
       console.log("server handling addSong");
       console.log(roomId);
       console.log(song);
-      console.log("blah");
 
       // If this is the first song you also have to
       // update current song in room to this songId.
       try {
         const songData = await dao.addSong(song, roomId);
         song.id = songData.lastId;
-        io.emit("songAdded", song);
+        emitToSocketsInRoom(roomId, "songAdded", song);
 
         const songs = await dao.getSongsByRoomId(roomId);
         // If this was the first song, update current song in room.
         if (songs.length === 1) {
           await dao.updateRoomCurrentSongId(roomId, song.id);
 
-          io.emit("currentSongId", song.id);
+          emitToSocketsInRoom(roomId, "currentSongId", song.id);
         }
       } catch (err) {
         console.log("Error adding song: " + err);
@@ -71,7 +74,7 @@ module.exports = function handleSockets(io, dao) {
         if (state === "play" || state === "pause") {
           const playing = state === "play";
           dao.updateRoomPlaying(roomId, playing);
-          io.emit("playing", playing);
+          emitToSocketsInRoom(roomId, "playing", playing);
           return;
         }
 
@@ -96,7 +99,7 @@ module.exports = function handleSockets(io, dao) {
         }
 
         dao.updateRoomCurrentSongId(roomId, updatedSongId);
-        io.emit("currentSongId", updatedSongId);
+        emitToSocketsInRoom(roomId, "currentSongId", updatedSongId);
       } catch (err) {
         console.log("Error handling player state: " + err);
         return;
@@ -115,11 +118,9 @@ module.exports = function handleSockets(io, dao) {
       console.log("current room: " + currentRoom);
       console.log("members in room: " + roomToSockets[currentRoom].length);
 
-      // TODO: send over playlist and room info
       Promise.all([dao.getRoomById(roomId), dao.getSongsByRoomId(roomId)])
         .then(([room, songs]) => {
           console.log(room);
-          console.log(songs);
 
           const roomInfo = {
             roomName: room.name,
