@@ -6,6 +6,10 @@ export function joinRoom(roomId) {
   socket.emit("joinRoom", roomId);
 }
 
+export function onReconnect(cb) {
+  socket.on("reconnect", () => cb());
+}
+
 export function onRoomInfo(cb) {
   socket.on("roomInfo", roomInfo => {
     console.log("received room info: " + roomInfo);

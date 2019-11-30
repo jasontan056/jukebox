@@ -8,7 +8,8 @@ import {
   onRoomInfo,
   onCurrentSongIdChange,
   onPlayingChanged,
-  sendCurrentSongId
+  sendCurrentSongId,
+  onReconnect
 } from "./Socket";
 import { List } from "immutable";
 import { useParams } from "react-router-dom";
@@ -87,6 +88,7 @@ export default function Client(props) {
   }, []);
 
   useEffect(() => {
+    onReconnect(() => joinRoom(roomId));
     joinRoom(roomId);
   }, [roomId]);
 
