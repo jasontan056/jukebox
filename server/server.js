@@ -86,4 +86,8 @@ app.get("/*", function(req, res) {
   res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
 
+process.on("uncaughtException", function(exception) {
+  console.log("Got an uncaught exception: " + exception);
+});
+
 http.listen(process.env.PORT || 8080);
