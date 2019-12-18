@@ -133,6 +133,7 @@ export default function Client(props) {
             songs={songs}
             currentSongId={currentSongId}
             onSongClicked={handleSongClicked}
+            clickable={true}
           />
         </div>
       </div>

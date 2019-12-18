@@ -7,8 +7,12 @@ const ulStyle = {
   paddingInlineStart: 0
 };
 
-const songItemStyle = {
+const clickableSongItem = {
   cursor: "pointer"
+};
+
+const nonClickableSongItem = {
+  cursor: "default"
 };
 
 export default function PlayList(props) {
@@ -16,7 +20,7 @@ export default function PlayList(props) {
     return (
       <li key={index}>
         <SongItem
-          style={songItemStyle}
+          style={props.clickable ? clickableSongItem : nonClickableSongItem}
           onClick={() => props.onSongClicked && props.onSongClicked(song)}
           title={song.title}
           channelTitle={song.channelTitle}
